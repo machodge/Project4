@@ -135,7 +135,7 @@ int main(int argc, char *argv[]) {
              //delete mmIT before iterating it
 						nDistance.erase(mmIT++);
                 }             
-        }      
+        }    
 						grid[tempRow][tempCol-1].distance = tempDistance;
 						grid[tempRow][tempCol-1].backRow = tempRow;
 						grid[tempRow][tempCol-1].backCol = tempCol;
@@ -180,26 +180,32 @@ int main(int argc, char *argv[]) {
    
    deque<int>path;
    int total_distance;
+   int x, y;
+   
    total_distance = grid[rowEnd][colEnd].distance - grid[rowEnd][colEnd].cost + grid[rowStart][colStart].cost;
    cout << total_distance << endl;
    tempRow = rowEnd;
    tempCol = colEnd;
    //loop backwards from the end of the path and push the path to the front of the deque
-   while((grid[tempRow][tempCol].col != grid[rowStart][colStart].col) && (grid[tempRow][tempCol].row != grid[rowStart][colStart].row)){
-       path.push_front(grid[tempRow][tempCol].backCol);
-       path.push_front(grid[tempRow][tempCol].backRow);
-       tempRow = grid[tempRow][tempCol].backRow;
-       tempCol = grid[tempRow][tempCol].backCol;
+   while(1){         
+       if (tempRow == rowStart && tempCol == colStart) break;     
+       path.push_front(tempCol);
+       path.push_front(tempRow);
+       x = grid[tempRow][tempCol].backRow;
+       y = grid[tempRow][tempCol].backCol;
+       tempRow = x;
+       tempCol = y;
    }
-   cout << rowStart << " " << colStart << endl;
-   for(int i = 0; i < path.size(); i++){
+  cout << rowStart << " " << colStart << endl;
+  for(int i = 0; i < path.size(); i++){
        cout << path[i] << " ";
        i++;
        cout << path[i] << endl;
    } 
-  
-	cout << rowEnd << " " << colEnd <<endl;
+
 	
 	return 0;
 }
+
+
 
