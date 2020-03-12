@@ -37,42 +37,19 @@ Markdown Table
 
 | N             | Elapsed Time  | Memory Usage   |
 |---------------|---------------|----------------|
-| 10            | 00.0030       | ...            |
-| 20            | 00.0032       | ...            |
-| 50            | 00.0078       | ...            |
-| 100           | 00.0320       | ...            |
-| 200           | 00.2060       | ...            |
-| 500           | 02.9066       | ...            |
-| 1000          | 25.0504       | ...            |
+| 10            | 00.0030       | 00010400       |
+| 20            | 00.0032       | 00037280       |
+| 50            | 00.0078       | 00211160       |
+| 100           | 00.0320       | 00824480       |
+| 200           | 00.2060       | 03233480       |
+| 500           | 02.9066       | 20012360       |
+| 1000          | 25.0504       | 80024360       |
 |---------------|---------------|----------------|
 
-Question #1
------------------------------------------
-How did you represent the map as a graph?
------------------------------------------
+Memory found by taking the "mem_heap_B" in the "heap_tree=peak" in the massif file, as was recommend on piazza:
+https://piazza.com/class/k4r8tgsigni3a4?cid=145
 
-
-
-Question #2
-----------------------------------------------------------------------
-What is the complexity of your implementation of Dijkstra's Algorithm?
-----------------------------------------------------------------------
-
-
-
-Question #3
-----------------------------------------
-How well does your implementation scale?
-----------------------------------------
-
-
-Contributions
--------------
-
-David Hu
---------
-Wrote and debugged djikstras
 
 Nicholas Hodge
 --------------
-Created generate_map, updated the makefile to include generate_map, and helped debug djikstras 
+Created generate_map, updated the makefile to include generate_map, ran time and memory tests, and helped debug djikstras 
