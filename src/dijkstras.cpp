@@ -1,5 +1,5 @@
 // dijsktras.cpp
-
+//This takes a graph and finds the minimum path to the end location
 // Main Execution
 
 #include <iostream>
@@ -9,16 +9,14 @@
 #include <deque>
 
 using namespace std;
-
+//The struct that will store all of the important details
 struct Node{
 	int row;
 	int col;
-	int position;
 	int distance;
 	int cost;
 	char name;
 	bool visit;
-	map<int,int>edge;
 	int backRow;
 	int backCol;
 
@@ -33,7 +31,7 @@ struct Node{
 int main(int argc, char *argv[]) {
     
 	int numTile;
-
+  //Reading in the information
 	cin >> numTile;
 	char tilel;
 	int tileCost;
@@ -50,7 +48,7 @@ int main(int argc, char *argv[]) {
 	int col;
 
 	cin >> row >> col;
-
+  //This is how the graph will be visualized
 	vector< vector<Node> >grid;
 
 	grid.resize(row);
@@ -60,7 +58,7 @@ int main(int argc, char *argv[]) {
 		grid[i].resize(col);
 	}
 	
-
+  //Making sure all of the costs are inputed correctly
 	for(int i = 0; i < row; i++){
 		for(int j = 0; j < col; j++){
 			cin >> tileChar;
@@ -75,7 +73,6 @@ int main(int argc, char *argv[]) {
 
 	}
 	
-
 	int rowStart;
 	int colStart;
 	int rowEnd;
@@ -95,19 +92,19 @@ int main(int argc, char *argv[]) {
 	
 	multimap<int, Node> nDistance;
 	multimap<int, Node>::iterator mmIT;
-
+  //Start off the algorithm by putting in starting location
 	nDistance.insert(make_pair(startN.distance, startN));
 
 	//Dijkstra's algorithm
 	while(nDistance.size() != 0){
 		mmIT = nDistance.begin();
 
-		
+		//Getting the row and column to be tested
 		tempRow = mmIT->second.row;
 		tempCol = mmIT->second.col;
 
 		nDistance.erase(mmIT);
-
+    //Making sure the current node is now visited so it cannot be used again
 		grid[tempRow][tempCol].visit = true;
 		//check the right side
 		if(grid[tempRow][tempCol].col + 1 < col && grid[tempRow][tempCol+1].visit != true){
@@ -115,10 +112,11 @@ int main(int argc, char *argv[]) {
 			if(grid[tempRow][tempCol+1].distance == INT_MAX ||tempDistance<grid[tempRow][tempCol+1].distance){
 				for(mmIT = nDistance.begin(); mmIT != nDistance.end(); mmIT++){
 					if(tempRow == mmIT->second.row && tempCol+1 == mmIT ->second.col){
-             //delete mmIT before iterating it
+            //Deleting the node if it finds it
 						nDistance.erase(mmIT++);
            }
            }
+           //Setting node to contain the new distance from starting location and making sure it can backtrack with the back row and back column
 						grid[tempRow][tempCol+1].distance = tempDistance;
 						grid[tempRow][tempCol+1].backRow = tempRow;
 						grid[tempRow][tempCol+1].backCol = tempCol;
@@ -132,10 +130,11 @@ int main(int argc, char *argv[]) {
 			if(grid[tempRow][tempCol-1].distance == INT_MAX ||tempDistance<grid[tempRow][tempCol-1].distance){
 				for(mmIT = nDistance.begin(); mmIT != nDistance.end();  mmIT++){
 					if(tempRow == mmIT->second.row && tempCol-1 == mmIT ->second.col){
-             //delete mmIT before iterating it
+             //Delete node if it finds it
 						nDistance.erase(mmIT++);
                 }             
         }    
+        //Setting node to contain the new distance from starting location and making sure it can backtrack with the back row and back column
 						grid[tempRow][tempCol-1].distance = tempDistance;
 						grid[tempRow][tempCol-1].backRow = tempRow;
 						grid[tempRow][tempCol-1].backCol = tempCol;
@@ -149,10 +148,11 @@ int main(int argc, char *argv[]) {
 			if(grid[tempRow-1][tempCol].distance == INT_MAX ||tempDistance<grid[tempRow-1][tempCol].distance){
 				for(mmIT = nDistance.begin(); mmIT != nDistance.end(); mmIT++){
 					if(tempRow-1 == mmIT->second.row && tempCol == mmIT ->second.col){
-             //delete mmIT before iterating it
+             //Deleting the node if it finds it
 						nDistance.erase(mmIT++);
             }
         }
+        //Setting node to contain the new distance from starting location and making sure it can backtrack with the back row and back column
 				grid[tempRow-1][tempCol].distance = tempDistance;
         grid[tempRow-1][tempCol].backRow = tempRow;
         grid[tempRow-1][tempCol].backCol = tempCol;
@@ -165,10 +165,11 @@ int main(int argc, char *argv[]) {
 			if(grid[tempRow+1][tempCol].distance == INT_MAX ||tempDistance<grid[tempRow+1][tempCol].distance){
 				for(mmIT = nDistance.begin(); mmIT != nDistance.end(); mmIT++){
 					if(tempRow+1 == mmIT->second.row && tempCol == mmIT ->second.col){
-            //delete mmIT before iterating it
+             //Deleting the node if it finds it
 						nDistance.erase(mmIT++);
             }
         }
+        //Setting node to contain the new distance from starting location and making sure it can backtrack with the back row and back column
 						grid[tempRow+1][tempCol].distance = tempDistance;
 						grid[tempRow+1][tempCol].backRow = tempRow;
 						grid[tempRow+1][tempCol].backCol = tempCol;
@@ -177,11 +178,11 @@ int main(int argc, char *argv[]) {
 		}
    
    }
-   
+   //MAking a deque to output the nodes
    deque<int>path;
    int total_distance;
    int x, y;
-   
+   //Finds the total distance travelled
    total_distance = grid[rowEnd][colEnd].distance - grid[rowEnd][colEnd].cost + grid[rowStart][colStart].cost;
    cout << total_distance << endl;
    tempRow = rowEnd;
@@ -196,6 +197,7 @@ int main(int argc, char *argv[]) {
        tempRow = x;
        tempCol = y;
    }
+   //Outputting the path in correct order
   cout << rowStart << " " << colStart << endl;
   for(int i = 0; i < path.size(); i++){
        cout << path[i] << " ";
@@ -206,6 +208,4 @@ int main(int argc, char *argv[]) {
 	
 	return 0;
 }
-
-
 
