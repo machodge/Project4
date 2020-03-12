@@ -1,31 +1,132 @@
 // dijsktras.cpp
 
-struct Node{
-
-	//x and y coordinates in graph
-	int x;
-	int y;
-
-	//cost to move from this node
-	int weight;
-
-	//sum of the weight
-	int distance;
-
-	//store the type of terrain for printing out
-	char type;
-
-	bool visited;
-
-	Node *backedge;
-
-	vector <Node *> adj;
-
-}
-
 // Main Execution
 
+#include <iostream>
+#include <map>
+#include <vector>
+#include <limits.h>
+
+using namespace std;
+
+struct Node{
+	int row;
+	int col;
+	int position;
+	int distance;
+	int cost;
+	char name;
+	bool visit;
+	map<int,int>edge;
+	int backRow;
+	int backCol;
+/*
+	Node(){
+		distance = INT_MAX;//From the wiki page
+		visit = false;
+	}
+
+	*/
+};
+
 int main(int argc, char *argv[]) {
-    return 0;
+    
+	int numTile;
+
+	cin >> numTile;
+	char tilel;
+	int tileCost;
+	char tileChar;
+	map<char,int>cost;
+	map<char,int>::iterator it;
+	for(int i = 0; i < numTile; i++){
+		
+		cin >> tilel >> tileCost;
+		cost[tileChar] = tileCost;
+	}
+
+	int row;
+	int col;
+
+	cin >> row >> col;
+
+	vector<Node>grid;
+
+	grid.resize(row);
+
+	
+	for(int i = 0; i < row; i++){
+		grid[i].resize(col);
+	}
+	
+
+	for(int i = 0; i < grid.size(); i++){
+	
+			cin >> tileChar;
+
+			grid[row].row = row;
+			grid[col].col = col;
+			
+			it = cost.find(tileChar);
+			grid[row][col].cost = it -> second;
+
+	}
+	
+
+	int rowStart;
+	int colStart;
+	int rowEnd;
+	int colEnd;
+
+	int tempDistance;
+
+	cin >> rowStart >> colStart >> rowEnd >> colEnd;
+
+	grid[rowStart][colStart].distance = 0;
+
+	Node startN = grid[rowStart][colStart];
+	Node endN = grid[rowEnd][colEnd];
+
+	Node current;
+	Node side;
+	
+	multimap<int, Node>nDistance;
+	multimap<int, Node>::iterator mmIT;
+
+	nDistance.insert(make_pair(startN.distance, startN));
+	//Dijkstra's algorithm
+	while(nDistance.size() != 0){
+
+		mmIT = nDistance.begin();
+
+		int tempRow;
+		int tempCol;
+
+		tempRow = mmIT->second.row;
+		tempCol = mmIT->second.col;
+
+		nDistance.erase(mmIT);
+
+		grid[tempRow][tempCol].visit = true;
+		
+		//check the right side
+		if(grid[tempRow][tempCol].col + 1 < col && board[tempRow][tempCol+1] != true){
+			tempDistance = grid[tempRow][tempCol].distance + grid[tempRow][tempCol].cost;
+			if(grid[tempRow][tempCol+1].distance == INT_MAX ||tempDistance<grid[tempRow][tempCol+1].distance){
+				for(mmIT = nDistance.begin(); mmIT != nDistance.end();mmIT++){
+					if(tempRow == mmIT->second.row && tempCol == mmIT ->second.col){
+						nDistance.erase(mmIT);
+						grid[tempRow][tempCol+1].distance = tempDistance;
+						grid[tempRow][tempCol+1].backRow = tempRow;
+						grid[tempRow][tempCol+1].backCol = tempCol;
+						nDistance.insert(make_pair(grid[tempRow][tempCol+1].distance));
+					}	
+				}
+			}
+		}
+
+	}
+	
+	return 0;
 }
 
