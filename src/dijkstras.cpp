@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 
 	cin >> row >> col;
 
-	vector<Node>grid;
+	vector< vector<Node> >grid;
 
 	grid.resize(row);
 
@@ -60,15 +60,16 @@ int main(int argc, char *argv[]) {
 	}
 	
 
-	for(int i = 0; i < grid.size(); i++){
-	
+	for(int i = 0; i < row; i++){
+		for(int j = 0; j < col; j++){
 			cin >> tileChar;
 
-			grid[row].row = row;
-			grid[col].col = col;
+			grid[i][j].row = row;
+			grid[i][j].col = col;
 			
 			it = cost.find(tileChar);
-			grid[row][col].cost = it -> second;
+			grid[i][j].cost = it -> second;
+		}
 
 	}
 	
@@ -110,7 +111,7 @@ int main(int argc, char *argv[]) {
 		grid[tempRow][tempCol].visit = true;
 		
 		//check the right side
-		if(grid[tempRow][tempCol].col + 1 < col && board[tempRow][tempCol+1] != true){
+		if(grid[tempRow][tempCol].col + 1 < col && grid[tempRow][tempCol+1].visit != true){
 			tempDistance = grid[tempRow][tempCol].distance + grid[tempRow][tempCol].cost;
 			if(grid[tempRow][tempCol+1].distance == INT_MAX ||tempDistance<grid[tempRow][tempCol+1].distance){
 				for(mmIT = nDistance.begin(); mmIT != nDistance.end();mmIT++){
@@ -119,7 +120,7 @@ int main(int argc, char *argv[]) {
 						grid[tempRow][tempCol+1].distance = tempDistance;
 						grid[tempRow][tempCol+1].backRow = tempRow;
 						grid[tempRow][tempCol+1].backCol = tempCol;
-						nDistance.insert(make_pair(grid[tempRow][tempCol+1].distance));
+						nDistance.insert(make_pair(grid[tempRow][tempCol+1].distance, grid[tempRow][tempCol]));
 					}	
 				}
 			}
